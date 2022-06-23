@@ -1,0 +1,91 @@
+<html>
+
+<head>
+
+</head>
+<style>
+    .btn-group button {
+      background-color: #ffffff; /* Green background */
+      border: 2px solid rgb(39, 125, 255); /* Green border */
+      color: rgb(0, 0, 0); /* White text */
+      padding: 10px 24px; /* Some padding */
+      cursor: pointer; /* Pointer/hand icon */
+      /* float: left; Float the buttons side by side */
+      border-radius: 28px;
+      margin: 10px;
+      font-size: 15px;
+    }
+
+    .section {
+    margin: 50px;
+    }
+ 
+    .section .cities {
+        font-weight: bold;
+        width: 30%;
+        padding: 30px;
+        border-radius: 20px;
+        background-color: rgb(6, 34, 76);
+        color: #ffffff;
+    }
+    
+    
+    .btn-group button:hover {
+      background-color: #c4f8ff;
+    }
+    </style>
+<body>
+    <div class="section">
+        <div class="btn-group" id="cities" style="width:100%">
+            <button value="Toronto"  style="width:50%" onclick="GetWeatherInfo('Toronto')">Toronto</button>
+            <button value="Oakville" style="width:50%" onclick="GetWeatherInfo('Oakville')">Oakville</button>
+        </div>
+        <div class="cities">   
+            <h1>Today's weather</h1>
+            <div id="icon" class="w-200"
+            style="height:200px; background-repeat: no-repeat; background-position: center; background-size: cover;">
+       </div>
+            <div style="font-size: 30px;" id="city"></div>
+            <h5 id="country"> </h5>
+            <div id="temp-label"></div>
+            <div id="temp"></div>
+            <br/>
+            <div id="wind-label"></div>
+            <div id="wind"></div>
+            <br/>
+            <div id="humidity-label"></div>
+            <div id="humidity"></div>
+            <br/>
+            <div id="description"></div>
+        </div>
+    </div>
+    <script>
+        function GetWeatherInfo(selectedCity) {
+            console.log("test");
+            debugger
+            var url = "http://api.openweathermap.org/data/2.5/weather?q=" + selectedCity + "&units=metric&appid=9ac1a63bcc229031ba2679a05eea4d1c&lang=fr";
+            fetch(url)
+                .then(response => response.json())
+                .then(data => ProcessJSON(data))
+                .catch(message => alert(message));;
+            }
+        
+        function ProcessJSON(json) {
+        var iconURL = "http://openweathermap.org/img/wn/" + json.weather[0].icon + "@4x.png"
+        document.getElementById("icon").style.setProperty("background-image", "url(" + iconURL + ")");
+        document.getElementById("city").innerHTML = json.name;
+        document.getElementById("country").innerHTML = json.sys.country;
+        document.getElementById("temp-label").innerHTML = "Temperature: " ;
+        document.getElementById("temp").innerHTML = json.main.temp + "°C" ;
+        document.getElementById("humidity-label").innerHTML = "Humidity: " ;
+        document.getElementById("humidity").innerHTML = json.main.humidity + "%";
+        document.getElementById("wind-label").innerHTML = "Wind speed: ";
+        document.getElementById("wind").innerHTML = json.wind.speed;
+        document.getElementById("description").innerHTML = json.weather[0].description ;
+
+    }
+  </script>
+
+</body>
+
+</html>
